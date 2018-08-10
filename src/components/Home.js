@@ -33,7 +33,6 @@ class Home extends Component {
   }
 
   handleChange(event) {
-    console.log(event.target.value)
     this.setState({ word: event.target.value })
   }
 
@@ -44,6 +43,7 @@ class Home extends Component {
 
   render() {
     let { word } = this.state
+    console.log(this.props.synonyms)
     return (
       <div>
         <TextField
@@ -61,10 +61,6 @@ class Home extends Component {
         <Button variant="outlined" onClick={this.handleSubmit}>
           Search
         </Button>
-        {this.props.synonyms.length &&
-          this.props.synonyms.map(word => {
-            return <p key={word}>{word}</p>
-          })}
       </div>
     )
   }

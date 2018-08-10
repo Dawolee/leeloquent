@@ -15,21 +15,43 @@ export const searchSynonyms = word => dispatch => {
   return axios
     .get(`${THESAURUS_API_KEY}${word}/json`)
     .then(res => {
+      console.log(res)
       //concats the the nouns and verbs synonyms and dispatches the action with the new array.
-      let syns = []
-      if (res.data.noun) {
-        syns = syns.concat(res.data.noun.syn)
+      let result = res.data
+      let syns = {
+        nouns: {
+          synonyms: [],
+          antonyms: []
+        },
+        verbs: {
+          synonyms: [],
+          antonyms: []
+        },
+        adjectives: {
+          synonyms: [],
+          antonyms: []
+        }
       }
-      if (res.data.verb) {
-        syns = syns.concat(res.data.verb.syn)
+      if (result.noun) {
+        syns.nouns.synonyms = result.noun.syn
+        syns.nouns.antonyms = result.noun.ant ? result.noun.ant : []
       }
-
+      if (result.verb) {
+        syns.verbs.synonyms = result.verb.syn
+        syns.verbs.antonyms = result.verb.ant ? result.verb.ant : []
+      }
+      if (result.adjective) {
+        syns.adjectives.synonyms = result.adjective.syn
+        syns.adjectives.antonyms = result.adjective.ant
+          ? result.adjective.ant
+          : []
+      }
       dispatch(fetchSynonyms(syns))
     })
     .catch(err => console.log(err))
 }
 
-export default (state = [], action) => {
+export default (state = {}, action) => {
   switch (action.type) {
     case UPDATE_SYNONYMS:
       return action.words
