@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import { searchSynonyms } from '../store/synonyms'
+import SynonymList from './SynonymList'
 
 const styles = theme => ({
   container: {
@@ -43,7 +44,7 @@ class Home extends Component {
 
   render() {
     let { word } = this.state
-    console.log(this.props.synonyms)
+    let { synonyms } = this.props
     return (
       <div>
         <TextField
@@ -61,6 +62,11 @@ class Home extends Component {
         <Button variant="outlined" onClick={this.handleSubmit}>
           Search
         </Button>
+        <div className="synonym-list">
+          <SynonymList name="adjectives" synonyms={synonyms} />
+          <SynonymList name="nouns" synonyms={synonyms} />
+          <SynonymList name="verbs" synonyms={synonyms} />
+        </div>
       </div>
     )
   }

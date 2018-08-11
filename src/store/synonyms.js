@@ -11,11 +11,9 @@ export const fetchSynonyms = words => {
 }
 
 export const searchSynonyms = word => dispatch => {
-  console.log(process.env.THESAURUS_API_KEY)
   return axios
     .get(`${THESAURUS_API_KEY}${word}/json`)
     .then(res => {
-      console.log(res)
       //concats the the nouns and verbs synonyms and dispatches the action with the new array.
       let result = res.data
       let syns = {
