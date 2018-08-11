@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import Collapse from '@material-ui/core/Collapse'
-import ExpandLess from '@material-ui/icons/ExpandLess'
-import ExpandMore from '@material-ui/icons/ExpandMore'
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Collapse,
+  ListItemIcon
+} from '@material-ui/core'
+import { ExpandLess, ExpandMore, Add } from '@material-ui/icons'
 
 const styles = theme => ({
   root: {
@@ -33,6 +35,9 @@ class SynonymList extends Component {
       <div className={classes.root}>
         <List component="nav">
           <ListItem button onClick={this.handleClick}>
+            <ListItemIcon>
+              <Add />
+            </ListItemIcon>
             <ListItemText inset primary={displayName} />
             {this.state.open ? <ExpandLess /> : <ExpandMore />}
           </ListItem>

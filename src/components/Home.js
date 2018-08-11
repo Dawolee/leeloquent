@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import TextField from '@material-ui/core/TextField'
+import { TextField, Button } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
 import { searchSynonyms } from '../store/synonyms'
 import SynonymList from './SynonymList'
 
