@@ -14,7 +14,6 @@ class ResponsiveDialog extends React.Component {
   }
 
   handleClickOpen = () => {
-    console.log(this.props.word)
     this.setState({ open: true })
   }
 
