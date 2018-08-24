@@ -11,3 +11,9 @@ body {
   margin: 5% auto 0 auto;
   flex-wrap: wrap;
 }
+
+.edit-quote {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
