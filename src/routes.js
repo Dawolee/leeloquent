@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter, Route, Switch } from 'react-router-dom'
-import { Home, Search, Quotes, ErrorPage } from './components'
+import { Home, Search, Quotes, ErrorPage, Auth } from './components'
 import fire from './fire'
 import { loginUser } from './store/user'
 import { connect } from 'react-redux'
@@ -26,6 +26,7 @@ class Routes extends Component {
     return (
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route exact path="/auth" component={Auth} />
         {currentUser && (
           <Switch>
             <Route exact path="/quotes" component={Quotes} />
