@@ -4,7 +4,8 @@ import { searchSynonyms } from '../store/synonyms'
 
 const mapState = state => {
   return {
-    synonyms: state.synonyms
+    synonyms: state.synonyms,
+    user: state.user
   }
 }
 
