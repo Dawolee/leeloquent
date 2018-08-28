@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { Button } from '@material-ui/core'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import fire from '../fire'
 import firebase from 'firebase'
@@ -10,17 +8,18 @@ class Auth extends Component {
   render() {
     let uiConfig = {
       signInFlow: 'popup',
-      signInSuccessUrl: '/quotes',
+      signInSuccessUrl: '/profile',
       signInOptions: [
         // Leave othe lines as is for the providers you want to offer your users.
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         firebase.auth.EmailAuthProvider.PROVIDER_ID
       ]
     }
+
     let { user } = this.props
     return (
       <div>
-        {!this.props.user && (
+        {!user && (
           <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={fire.auth()} />
         )}
       </div>

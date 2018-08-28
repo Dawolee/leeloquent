@@ -42,11 +42,10 @@ class Navbar extends Component {
   }
 
   render() {
-    console.log(this.props)
     const { classes, user } = this.props
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" color="secondary">
           <Toolbar>
             <IconButton
               className={classes.menuButton}
@@ -59,15 +58,15 @@ class Navbar extends Component {
               variant="title"
               color="inherit"
               className={classes.flex}
-            >
-              News
-            </Typography>
+            />
             {user ? (
-              <Button onClick={this.handleLogOut}>Logout</Button>
-            ) : (
-              <Button>
-                <Link to="/auth">Login</Link>
+              <Button color="inherit" onClick={this.handleLogOut}>
+                Logout
               </Button>
+            ) : (
+              <Link style={{ textDecoration: 'none' }} to="/auth">
+                <Button color="inherit">Login/Sign Up</Button>
+              </Link>
             )}
           </Toolbar>
         </AppBar>

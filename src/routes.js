@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter, Route, Switch } from 'react-router-dom'
-import { Home, Search, Quotes, ErrorPage, Auth } from './components'
-import fire from './fire'
-import { loginUser } from './store/user'
+import { Home, Search, Quotes, ErrorPage, Auth, Profile } from './components'
 import { connect } from 'react-redux'
 
 class Routes extends Component {
@@ -10,17 +8,13 @@ class Routes extends Component {
     currentUser: null
   }
 
-  componentDidMount() {
-    fire.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.setState({ currentUser: true }, () => {
-          this.props.login(user)
-        })
-      } else {
-        this.setState({ currentUser: null })
-      }
-    })
+  componentDidUpdate(prevProps) {
+    let { user } = this.props
+    if (user !== prevProps.user) {
+      this.setState({ currentUser: user })
+    }
   }
+
   render() {
     let { currentUser } = this.state
     return (
@@ -29,6 +23,7 @@ class Routes extends Component {
         <Route exact path="/auth" component={Auth} />
         {currentUser && (
           <Switch>
+            <Route exact path="/profile" component={Profile} />
             <Route exact path="/quotes" component={Quotes} />
             <Route path="/search" component={Search} />
           </Switch>
@@ -45,17 +40,4 @@ const mapState = state => {
   }
 }
 
-const mapDispatch = dispatch => {
-  return {
-    login: user => {
-      dispatch(loginUser(user))
-    }
-  }
-}
-
-export default withRouter(
-  connect(
-    mapState,
-    mapDispatch
-  )(Routes)
-)
+export default withRouter(connect(mapState)(Routes))
