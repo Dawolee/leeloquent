@@ -11,7 +11,6 @@ class Quotes extends Component {
   }
 
   componentDidMount() {
-    console.log('mounted!')
     let { user, getAllQuotes } = this.props
     getAllQuotes(user.email)
   }

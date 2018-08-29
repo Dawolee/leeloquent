@@ -51,10 +51,9 @@ class Navbar extends Component {
               className={classes.menuButton}
               color="inherit"
               aria-label="Menu"
-            />
-            <Button>
+            >
               <KeyboardArrowLeft onClick={() => history.goBack()} />
-            </Button>
+            </IconButton>
             <Typography
               variant="title"
               color="inherit"

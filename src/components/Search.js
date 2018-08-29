@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { searchSynonyms } from '../store/synonyms'
 import { SynonymList, Popup } from './index'
-import { deleteQuoteFromDb } from '../store/quotes'
+import { deleteQuoteFromDb, updateQuoteInDB } from '../store/quotes'
 
 const styles = theme => ({
   container: {
@@ -26,7 +26,14 @@ const styles = theme => ({
 class Search extends Component {
   state = {
     word: '',
-    search: false
+    search: false,
+    selectedWord: '',
+    quote: ''
+  }
+
+  componentDidMount() {
+    let { quote } = this.props.location.state
+    this.setState({ quote })
   }
 
   handleChange = event => {
@@ -45,6 +52,12 @@ class Search extends Component {
     this.setState({ word: '' })
   }
 
+  selectedWordChange = selected => {
+    this.setState({ selectedWord: selected }, () => {
+      console.log(this.state)
+    })
+  }
+
   handleDelete = () => {
     //finds the correct quote and queries the firestore for it and then deletes it and goes back to the previous page
     let { location, deleteQuote, history } = this.props
@@ -53,10 +66,21 @@ class Search extends Component {
     deleteQuote(quote, history)
   }
 
+  handleRemoveWord = word => {
+    let { quote } = this.state
+    let { updateQuote, user } = this.props
+    let idxOfRemovedWord = quote.indexOf(word)
+    let updated = quote
+      .slice(0, idxOfRemovedWord)
+      .concat(quote.slice(idxOfRemovedWord + 1 + word.length))
+    this.setState({ quote: updated }, () => {
+      updateQuote(user.email, quote, updated)
+    })
+  }
+
   render() {
-    let { word, search } = this.state
-    let { synonyms, location } = this.props
-    let { quote } = location.state
+    let { word, search, quote } = this.state
+    let { synonyms } = this.props
     //gets rid of special characters
     quote = quote.replace(/[^a-zA-Z ]/g, '').split(' ')
     return (
@@ -68,7 +92,14 @@ class Search extends Component {
         <div className="edit-quote">
           {quote &&
             quote.map(word => {
-              return <Popup key={word} word={word} />
+              return (
+                <Popup
+                  key={word}
+                  word={word}
+                  selectedWordChange={this.selectedWordChange}
+                  handleRemoveWord={this.handleRemoveWord}
+                />
+              )
             })}
         </div>
         <Button onClick={this.toggleSearch}>
@@ -95,9 +126,21 @@ class Search extends Component {
         )}
 
         <div className="synonym-list">
-          <SynonymList name="adjectives" synonyms={synonyms} />
-          <SynonymList name="nouns" synonyms={synonyms} />
-          <SynonymList name="verbs" synonyms={synonyms} />
+          <SynonymList
+            name="adjectives"
+            synonyms={synonyms}
+            selectedWordChange={this.selectedWordChange}
+          />
+          <SynonymList
+            name="nouns"
+            synonyms={synonyms}
+            selectedWordChange={this.selectedWordChange}
+          />
+          <SynonymList
+            name="verbs"
+            synonyms={synonyms}
+            selectedWordChange={this.selectedWordChange}
+          />
         </div>
       </div>
     )
@@ -110,6 +153,7 @@ Search.propTypes = {
 
 const mapState = state => {
   return {
+    user: state.user,
     synonyms: state.synonyms
   }
 }
@@ -121,6 +165,9 @@ const mapDispatch = dispatch => {
     },
     deleteQuote: (quote, history) => {
       dispatch(deleteQuoteFromDb(quote, history))
+    },
+    updateQuote: (email, quote, updatedQuote) => {
+      dispatch(updateQuoteInDB(email, quote, updatedQuote))
     }
   }
 }

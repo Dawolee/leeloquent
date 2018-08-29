@@ -22,14 +22,16 @@ class ResponsiveDialog extends React.Component {
   }
 
   handleSearch = () => {
-    let { search, word } = this.props
+    let { search, word, selectedWordChange } = this.props
     this.setState({ open: false })
+    selectedWordChange(word)
     search(word)
   }
 
   handleRemove = () => {
+    let { handleRemoveWord, word } = this.props
     this.setState({ open: false })
-    console.log(this.props)
+    handleRemoveWord(word)
   }
 
   render() {

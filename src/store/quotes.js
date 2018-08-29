@@ -3,6 +3,7 @@ import { db } from '../fire'
 const FETCH_QUOTES = 'FETCH_QUOTES'
 const POST_QUOTE = 'POST_QUOTE'
 const DELETE_QUOTE = 'DELETE_QUOTE'
+const UPDATE_QUOTE = 'UPDATE_QUOTE'
 
 export const getQuotes = quotes => {
   return {
@@ -21,6 +22,13 @@ export const addQuote = quote => {
 export const deleteQuote = quote => {
   return {
     type: DELETE_QUOTE,
+    quote
+  }
+}
+
+export const updateQuote = quote => {
+  return {
+    type: UPDATE_QUOTE,
     quote
   }
 }
@@ -82,6 +90,25 @@ export const addQuoteToDb = (quote, email) => dispatch => {
     })
 }
 
+export const updateQuoteInDB = (email, quote, updatedQuote) => dispatch => {
+  return db
+    .collection('quotes')
+    .where('associatedUser', '==', email)
+    .where('quote', '==', quote)
+    .get()
+    .then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        db.collection('quotes')
+          .doc(doc.id)
+          .update({ quote: updatedQuote })
+      })
+      dispatch(updateQuote(updatedQuote))
+    })
+    .catch(error => {
+      console.log('Error getting documents: ', error)
+    })
+}
+
 export default (state = [], action) => {
   switch (action.type) {
     case FETCH_QUOTES:
@@ -90,6 +117,8 @@ export default (state = [], action) => {
       return [...state, action.quote]
     case DELETE_QUOTE:
       return state.filter(quote => quote !== action.quote)
+    case UPDATE_QUOTE:
+      return [...state, action.quote]
     default:
       return state
   }
