@@ -8,7 +8,7 @@ import {
   Button,
   IconButton
 } from '@material-ui/core/'
-import MenuIcon from '@material-ui/icons/Menu'
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import { Link } from 'react-router-dom'
 import fire from '../fire'
 
@@ -42,7 +42,7 @@ class Navbar extends Component {
   }
 
   render() {
-    const { classes, user } = this.props
+    const { classes, user, history } = this.props
     return (
       <div className={classes.root}>
         <AppBar position="static" color="secondary">
@@ -51,20 +51,32 @@ class Navbar extends Component {
               className={classes.menuButton}
               color="inherit"
               aria-label="Menu"
-            >
-              <MenuIcon />
-            </IconButton>
+            />
+            <Button>
+              <KeyboardArrowLeft onClick={() => history.goBack()} />
+            </Button>
             <Typography
               variant="title"
               color="inherit"
               className={classes.flex}
             />
             {user ? (
-              <Button color="inherit" onClick={this.handleLogOut}>
-                Logout
-              </Button>
+              <div>
+                <Link
+                  style={{ textDecoration: 'none', color: '#FFF' }}
+                  to="/profile"
+                >
+                  <Button color="inherit">Profile</Button>
+                </Link>
+                <Button color="inherit" onClick={this.handleLogOut}>
+                  Logout
+                </Button>
+              </div>
             ) : (
-              <Link style={{ textDecoration: 'none' }} to="/auth">
+              <Link
+                style={{ textDecoration: 'none', color: '#FFF' }}
+                to="/auth"
+              >
                 <Button color="inherit">Login/Sign Up</Button>
               </Link>
             )}

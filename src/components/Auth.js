@@ -17,6 +17,7 @@ class Auth extends Component {
     }
 
     let { user } = this.props
+    //checks if a user is logged in and depending on that, shows the Auth UI
     return (
       <div>
         {!user && (

@@ -24,6 +24,7 @@ class SynonymList extends Component {
 
   render() {
     const { classes, name, synonyms } = this.props
+    //the type (verb, noun, adjective) is passed in from parent and then used as a key for the synonym API return object.
     let displayName = name[0].toUpperCase() + name.slice(1)
     let length = synonyms[name] ? synonyms[name].synonyms.length : 0
     return (

@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { db } from '../fire'
 import { TextField, Button } from '@material-ui/core'
 import { connect } from 'react-redux'
-import { fetchAllQuotes } from '../store/quotes'
+import { fetchAllQuotes, addQuoteToDb } from '../store/quotes'
 
 class Quotes extends Component {
   state = {
@@ -12,6 +11,7 @@ class Quotes extends Component {
   }
 
   componentDidMount() {
+    console.log('mounted!')
     let { user, getAllQuotes } = this.props
     getAllQuotes(user.email)
   }
@@ -21,26 +21,32 @@ class Quotes extends Component {
   }
 
   handleSubmit = () => {
-    let { currentQuote, currentUser } = this.state
-    db.collection('quotes')
-      .add({
-        quote: currentQuote,
-        associatedUser: currentUser.email
-      })
-      .then(docRef => {
-        this.setState({ currentQuote: '' })
-        console.log('Document written with ID: ', docRef.id)
-      })
-      .catch(error => {
-        console.error('Error adding document: ', error)
-      })
+    let { user, addQuote } = this.props
+    let { currentQuote } = this.state
+    let temp = currentQuote
+    addQuote(temp, user.email)
+    //sets currentQuote to empty, so you can start typing a new quote to add
+    this.setState({ currentQuote: '' })
   }
 
   render() {
     let { quotes } = this.props
-    console.log(this.props)
     return (
       <div>
+        <TextField
+          id="full-width"
+          label="Add a new quote"
+          InputLabelProps={{
+            shrink: true
+          }}
+          placeholder="Type here"
+          margin="normal"
+          value={this.state.currentQuote}
+          onChange={this.handleChange}
+        />
+        <Button variant="outlined" onClick={this.handleSubmit}>
+          Add
+        </Button>
         <div>
           {quotes &&
             quotes.map(quote => {
@@ -59,20 +65,6 @@ class Quotes extends Component {
               )
             })}
         </div>
-        <TextField
-          id="full-width"
-          label="Add a new quote"
-          InputLabelProps={{
-            shrink: true
-          }}
-          placeholder="Type here"
-          margin="normal"
-          value={this.state.currentQuote}
-          onChange={this.handleChange}
-        />
-        <Button variant="outlined" onClick={this.handleSubmit}>
-          Add
-        </Button>
       </div>
     )
   }
@@ -89,6 +81,9 @@ const mapDispatch = dispatch => {
   return {
     getAllQuotes: email => {
       dispatch(fetchAllQuotes(email))
+    },
+    addQuote: (quote, email) => {
+      dispatch(addQuoteToDb(quote, email))
     }
   }
 }

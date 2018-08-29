@@ -33,7 +33,6 @@ class ResponsiveDialog extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     const { word } = this.props
     return (
       <div>
