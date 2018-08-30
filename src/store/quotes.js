@@ -91,6 +91,7 @@ export const addQuoteToDb = (quote, email) => dispatch => {
 }
 
 export const updateQuoteInDB = (email, quote, updatedQuote) => dispatch => {
+  //finds quote by user and matching quote, then grabs the id of the quote to update it and dispatch changes to reducer.
   return db
     .collection('quotes')
     .where('associatedUser', '==', email)

@@ -22,3 +22,10 @@ body {
   display: flex;
   justify-content: space-evenly;
 }
+
+#full-width {
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto 0 auto;
+}

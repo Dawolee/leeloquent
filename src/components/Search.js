@@ -27,8 +27,9 @@ class Search extends Component {
   state = {
     word: '',
     search: false,
-    selectedWord: '',
-    quote: ''
+    quote: '',
+    edit: false,
+    editedQuote: ''
   }
 
   componentDidMount() {
@@ -45,6 +46,25 @@ class Search extends Component {
     this.state.search
       ? this.setState({ search: false })
       : this.setState({ search: true })
+  }
+
+  toggleEdit = () => {
+    //toggles whether to show or hide the quote edit field
+    this.state.edit
+      ? this.setState({ edit: false })
+      : this.setState({ edit: true })
+  }
+
+  editQuote = event => {
+    this.setState({ editedQuote: event.target.value })
+  }
+
+  handleEdit = () => {
+    let { quote, editedQuote } = this.state
+    let { updateQuote, user } = this.props
+    this.setState({ quote: editedQuote, editedQuote: '', edit: false }, () => {
+      updateQuote(user.email, quote, editedQuote)
+    })
   }
 
   handleSubmit = () => {
@@ -66,41 +86,64 @@ class Search extends Component {
     deleteQuote(quote, history)
   }
 
-  handleRemoveWord = word => {
+  handleRemoveWord = (word, index) => {
     let { quote } = this.state
     let { updateQuote, user } = this.props
-    let idxOfRemovedWord = quote.indexOf(word)
-    let updated = quote
-      .slice(0, idxOfRemovedWord)
-      .concat(quote.slice(idxOfRemovedWord + 1 + word.length))
+    let updated = quote.split(' ')
+    //uses the index of the word from the array to splice value out
+    let idxOfRemovedWord = index
+    updated.splice(idxOfRemovedWord, 1)
+    updated = updated.join(' ')
     this.setState({ quote: updated }, () => {
       updateQuote(user.email, quote, updated)
     })
   }
 
   render() {
-    let { word, search, quote } = this.state
+    let { word, search, quote, edit } = this.state
     let { synonyms } = this.props
     //gets rid of special characters
-    quote = quote.replace(/[^a-zA-Z ]/g, '').split(' ')
+    let temp = quote.replace(/[^a-zA-Z ]/g, '').split(' ')
     return (
       <div>
         <Link style={{ textDecoration: 'none', color: '#FFF' }} to="/quotes">
           <Button>Go to Quotes</Button>
         </Link>
         <Button onClick={this.handleDelete}>Delete Quote</Button>
+        <Button onClick={this.toggleEdit}>Edit Quote</Button>
         <div className="edit-quote">
-          {quote &&
-            quote.map(word => {
+          {temp &&
+            !edit &&
+            temp.map((word, index) => {
+              //takes quote from state and makes a popup button for each word
               return (
                 <Popup
-                  key={word}
+                  key={index}
                   word={word}
+                  index={index}
                   selectedWordChange={this.selectedWordChange}
                   handleRemoveWord={this.handleRemoveWord}
                 />
               )
             })}
+          {temp &&
+            edit && (
+              <div id="full-width">
+                <TextField
+                  fullWidth
+                  label="Edit Quote"
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  defaultValue={quote}
+                  margin="normal"
+                  onChange={this.editQuote}
+                />
+                <Button variant="outlined" onClick={this.handleEdit}>
+                  Edit
+                </Button>
+              </div>
+            )}
         </div>
         <Button onClick={this.toggleSearch}>
           {search ? 'Hide' : 'Search for Words'}

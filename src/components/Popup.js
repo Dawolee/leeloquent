@@ -29,9 +29,9 @@ class ResponsiveDialog extends React.Component {
   }
 
   handleRemove = () => {
-    let { handleRemoveWord, word } = this.props
+    let { handleRemoveWord, word, index } = this.props
     this.setState({ open: false })
-    handleRemoveWord(word)
+    handleRemoveWord(word, index)
   }
 
   render() {

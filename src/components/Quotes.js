@@ -22,30 +22,35 @@ class Quotes extends Component {
   handleSubmit = () => {
     let { user, addQuote } = this.props
     let { currentQuote } = this.state
-    let temp = currentQuote
-    addQuote(temp, user.email)
-    //sets currentQuote to empty, so you can start typing a new quote to add
-    this.setState({ currentQuote: '' })
+    if (currentQuote.length) {
+      //checks if current string is empty or not before adding to firestore
+      let temp = currentQuote
+      addQuote(temp, user.email)
+      //sets currentQuote to empty, so you can start typing a new quote to add
+      this.setState({ currentQuote: '' })
+    }
   }
 
   render() {
     let { quotes } = this.props
     return (
       <div>
-        <TextField
-          id="full-width"
-          label="Add a new quote"
-          InputLabelProps={{
-            shrink: true
-          }}
-          placeholder="Type here"
-          margin="normal"
-          value={this.state.currentQuote}
-          onChange={this.handleChange}
-        />
-        <Button variant="outlined" onClick={this.handleSubmit}>
-          Add
-        </Button>
+        <div id="full-width">
+          <TextField
+            fullWidth
+            label="Add a new quote"
+            InputLabelProps={{
+              shrink: true
+            }}
+            placeholder="Type here"
+            margin="normal"
+            value={this.state.currentQuote}
+            onChange={this.handleChange}
+          />
+          <Button variant="outlined" onClick={this.handleSubmit}>
+            Add
+          </Button>
+        </div>
         <div>
           {quotes &&
             quotes.map(quote => {
