@@ -29,7 +29,10 @@ class Search extends Component {
     search: false,
     quote: '',
     edit: false,
-    editedQuote: ''
+    editedQuote: '',
+    selectedWordIdx: null,
+    selectedSynonym: null,
+    tempQuote: ''
   }
 
   componentDidMount() {
@@ -60,11 +63,11 @@ class Search extends Component {
   }
 
   handleEdit = () => {
-    let { quote, editedQuote } = this.state
-    let { updateQuote, user } = this.props
-    this.setState({ quote: editedQuote, editedQuote: '', edit: false }, () => {
-      updateQuote(user.email, quote, editedQuote)
-    })
+    let { editedQuote } = this.state
+    if (editedQuote) {
+      //checks if quote has been edited before updating the quote in the db
+      this.setState({ quote: editedQuote, editedQuote: '', edit: false })
+    }
   }
 
   handleSubmit = () => {
@@ -72,9 +75,20 @@ class Search extends Component {
     this.setState({ word: '' })
   }
 
-  selectedWordChange = selected => {
-    this.setState({ selectedWord: selected }, () => {
-      console.log(this.state)
+  selectedWordChange = idx => {
+    this.setState({ selectedWordIdx: idx })
+  }
+
+  selectedSynonymChange = word => {
+    //clicking on synonyms when a word in the current quote has been selected for replacement will swap the word with the selected synonym
+    let { selectedWordIdx, quote } = this.state
+    this.setState({ selectedSynonym: word }, () => {
+      if (selectedWordIdx !== null) {
+        let temp = quote.split(' ')
+        temp.splice(selectedWordIdx, 1, word)
+        temp = temp.join(' ')
+        this.setState({ quote: temp })
+      }
     })
   }
 
@@ -86,21 +100,26 @@ class Search extends Component {
     deleteQuote(quote, history)
   }
 
-  handleRemoveWord = (word, index) => {
+  handleRemoveWord = index => {
     let { quote } = this.state
-    let { updateQuote, user } = this.props
     let updated = quote.split(' ')
-    //uses the index of the word from the array to splice value out
-    let idxOfRemovedWord = index
-    updated.splice(idxOfRemovedWord, 1)
+    //uses the index of the word being removed from the array to splice value out
+    updated.splice(index, 1)
     updated = updated.join(' ')
-    this.setState({ quote: updated }, () => {
-      updateQuote(user.email, quote, updated)
-    })
+    this.setState({ quote: updated })
+  }
+
+  saveChanges = () => {
+    //if local quote is different from the original quote, saves changes
+    let { quote } = this.state
+    let { updateQuote, user, location } = this.props
+    let originalQuote = location.state.quote
+    updateQuote(user.email, originalQuote, quote)
+    this.setState({ selectedWordIdx: null })
   }
 
   render() {
-    let { word, search, quote, edit } = this.state
+    let { word, search, quote, edit, selectedWordIdx } = this.state
     let { synonyms } = this.props
     //gets rid of special characters
     let temp = quote.replace(/[^a-zA-Z ]/g, '').split(' ')
@@ -111,6 +130,7 @@ class Search extends Component {
         </Link>
         <Button onClick={this.handleDelete}>Delete Quote</Button>
         <Button onClick={this.toggleEdit}>Edit Quote</Button>
+        <Button onClick={this.saveChanges}>Save Changes</Button>
         <div className="edit-quote">
           {temp &&
             !edit &&
@@ -123,6 +143,7 @@ class Search extends Component {
                   index={index}
                   selectedWordChange={this.selectedWordChange}
                   handleRemoveWord={this.handleRemoveWord}
+                  isSelected={selectedWordIdx === index ? true : false}
                 />
               )
             })}
@@ -141,6 +162,12 @@ class Search extends Component {
                 />
                 <Button variant="outlined" onClick={this.handleEdit}>
                   Edit
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => this.setState({ edit: false })}
+                >
+                  Close
                 </Button>
               </div>
             )}
@@ -172,17 +199,17 @@ class Search extends Component {
           <SynonymList
             name="adjectives"
             synonyms={synonyms}
-            selectedWordChange={this.selectedWordChange}
+            selectedSynonymChange={this.selectedSynonymChange}
           />
           <SynonymList
             name="nouns"
             synonyms={synonyms}
-            selectedWordChange={this.selectedWordChange}
+            selectedSynonymChange={this.selectedSynonymChange}
           />
           <SynonymList
             name="verbs"
             synonyms={synonyms}
-            selectedWordChange={this.selectedWordChange}
+            selectedSynonymChange={this.selectedSynonymChange}
           />
         </div>
       </div>

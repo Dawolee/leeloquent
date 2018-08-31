@@ -23,7 +23,7 @@ class SynonymList extends Component {
   }
 
   render() {
-    const { classes, name, synonyms, selectedWordChange } = this.props
+    const { classes, name, synonyms, selectedSynonymChange } = this.props
     //the type (verb, noun, adjective) is passed in from parent and then used as a key for the synonym API return object.
     let displayName = name[0].toUpperCase() + name.slice(1)
     let length = synonyms[name] ? synonyms[name].synonyms.length : 0
@@ -46,7 +46,7 @@ class SynonymList extends Component {
                   <List
                     component="div"
                     disablePadding
-                    onClick={() => selectedWordChange(word)}
+                    onClick={() => selectedSynonymChange(word)}
                   >
                     <ListItem button className={classes.nested}>
                       <ListItemText inset primary={word} />

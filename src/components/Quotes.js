@@ -7,7 +7,8 @@ import { fetchAllQuotes, addQuoteToDb } from '../store/quotes'
 class Quotes extends Component {
   state = {
     currentUser: null,
-    currentQuote: ''
+    currentQuote: '',
+    add: false
   }
 
   componentDidMount() {
@@ -31,26 +32,40 @@ class Quotes extends Component {
     }
   }
 
+  toggleAdd = () => {
+    //toggles whether to show or hide the quote edit field
+    this.state.add
+      ? this.setState({ add: false })
+      : this.setState({ add: true })
+  }
+
   render() {
+    console.log(this.props)
     let { quotes } = this.props
+    let { add } = this.state
     return (
       <div>
-        <div id="full-width">
-          <TextField
-            fullWidth
-            label="Add a new quote"
-            InputLabelProps={{
-              shrink: true
-            }}
-            placeholder="Type here"
-            margin="normal"
-            value={this.state.currentQuote}
-            onChange={this.handleChange}
-          />
-          <Button variant="outlined" onClick={this.handleSubmit}>
-            Add
-          </Button>
-        </div>
+        <Button onClick={this.toggleAdd}>
+          {add ? 'Close text field' : 'Add new quote!'}
+        </Button>
+        {add && (
+          <div id="full-width">
+            <TextField
+              fullWidth
+              label="Add a new quote"
+              InputLabelProps={{
+                shrink: true
+              }}
+              placeholder="Type here"
+              margin="normal"
+              value={this.state.currentQuote}
+              onChange={this.handleChange}
+            />
+            <Button variant="outlined" onClick={this.handleSubmit}>
+              Add
+            </Button>
+          </div>
+        )}
         <div>
           {quotes &&
             quotes.map(quote => {

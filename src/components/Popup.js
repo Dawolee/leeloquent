@@ -22,23 +22,33 @@ class ResponsiveDialog extends React.Component {
   }
 
   handleSearch = () => {
-    let { search, word, selectedWordChange } = this.props
+    let { search, word } = this.props
     this.setState({ open: false })
-    selectedWordChange(word)
     search(word)
   }
 
   handleRemove = () => {
-    let { handleRemoveWord, word, index } = this.props
+    let { handleRemoveWord, index } = this.props
     this.setState({ open: false })
-    handleRemoveWord(word, index)
+    handleRemoveWord(index)
+  }
+
+  handleReplace = () => {
+    let { selectedWordChange, index } = this.props
+    this.setState({ open: false })
+    selectedWordChange(index)
   }
 
   render() {
-    const { word } = this.props
+    const { word, isSelected } = this.props
     return (
       <div>
-        <Button onClick={this.handleClickOpen}>{word}</Button>
+        <Button
+          style={{ color: isSelected && 'blue' }}
+          onClick={this.handleClickOpen}
+        >
+          {word}
+        </Button>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -48,7 +58,10 @@ class ResponsiveDialog extends React.Component {
 
           <DialogActions>
             <Button onClick={this.handleSearch} color="primary">
-              Search Synonyms
+              Find Synonyms
+            </Button>
+            <Button onClick={this.handleReplace} color="primary">
+              Replace Word
             </Button>
             <Button onClick={this.handleRemove} color="primary" autoFocus>
               Remove Word

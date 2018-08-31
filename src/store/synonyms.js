@@ -46,7 +46,11 @@ export const searchSynonyms = word => dispatch => {
       }
       dispatch(fetchSynonyms(syns))
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      //sends an empty object if no synonyms are found
+      dispatch(fetchSynonyms({}))
+      console.log(err)
+    })
 }
 
 export default (state = {}, action) => {
