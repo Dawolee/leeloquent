@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Mukta');
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  font-family: 'Mukta', sans-serif;
 }
 
 .synonym-list {
@@ -28,4 +31,32 @@ body {
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto 0 auto;
+}
+
+.App-header {
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.leeloquent {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cards {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
+.bottom-nav {
+  display: flex;
+  justify-content: center;
 }

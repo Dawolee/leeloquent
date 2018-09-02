@@ -7,7 +7,6 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 class Auth extends Component {
   render() {
     let uiConfig = {
-      signInFlow: 'popup',
       signInSuccessUrl: '/profile',
       signInOptions: [
         // Leave othe lines as is for the providers you want to offer your users.
@@ -20,6 +19,10 @@ class Auth extends Component {
     //checks if a user is logged in and depending on that, shows the Auth UI
     return (
       <div>
+        <header className="App-header">
+          <h1 className="leeloquent">Leeloquent </h1>
+          <h3 className="App-title">All your favorite quotes in one place!</h3>
+        </header>
         {!user && (
           <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={fire.auth()} />
         )}

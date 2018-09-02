@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import book from './book.jpeg'
 import './App.css'
 import Routes from './routes'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { Navbar } from './components'
+import { Navbar, BottomNav } from './components'
 import fire from './fire'
 import { loginUser } from './store/user'
 
@@ -21,11 +20,8 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
-        <header className="App-header">
-          <img src={book} className="App-logo" alt="logo" />
-          <h1 className="App-title">Babble like a King</h1>
-        </header>
         <Routes />
+        <BottomNav className="bottom-nav" />
       </div>
     )
   }

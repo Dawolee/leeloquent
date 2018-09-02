@@ -15,10 +15,16 @@ class Profile extends Component {
     let { currentUser } = this.state
     return (
       <div>
-        {currentUser && <h2>Welcome {currentUser.displayName}!</h2>}
-        <Link to="/quotes">
-          <Button>See your Quotes</Button>
-        </Link>
+        {currentUser ? (
+          <div>
+            <h2>Welcome {currentUser.displayName}!</h2>
+            <Link to="/quotes">
+              <Button>See your Quotes</Button>
+            </Link>
+          </div>
+        ) : (
+          <h2>Login to see your quotes!</h2>
+        )}
       </div>
     )
   }

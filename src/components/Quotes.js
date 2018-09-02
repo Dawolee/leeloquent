@@ -40,7 +40,6 @@ class Quotes extends Component {
   }
 
   render() {
-    console.log(this.props)
     let { quotes } = this.props
     let { add } = this.state
     return (
