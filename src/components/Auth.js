@@ -7,7 +7,7 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 class Auth extends Component {
   render() {
     let uiConfig = {
-      signInSuccessUrl: '/profile',
+      signInSuccessUrl: '/quotes',
       signInOptions: [
         // Leave othe lines as is for the providers you want to offer your users.
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -24,7 +24,11 @@ class Auth extends Component {
           <h3 className="App-title">All your favorite quotes in one place!</h3>
         </header>
         {!user && (
-          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={fire.auth()} />
+          <StyledFirebaseAuth
+            className="auth"
+            uiConfig={uiConfig}
+            firebaseAuth={fire.auth()}
+          />
         )}
       </div>
     )

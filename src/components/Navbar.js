@@ -61,12 +61,6 @@ class Navbar extends Component {
             />
             {user ? (
               <div>
-                <Link
-                  style={{ textDecoration: 'none', color: '#FFF' }}
-                  to="/profile"
-                >
-                  <Button color="inherit">Profile</Button>
-                </Link>
                 <Button color="inherit" onClick={this.handleLogOut}>
                   Logout
                 </Button>

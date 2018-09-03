@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter, Route, Switch } from 'react-router-dom'
-import { Home, Search, Quotes, ErrorPage, Auth, Profile } from './components'
+import { Home, Search, Quotes, ErrorPage, Auth, EditQuote } from './components'
 import { connect } from 'react-redux'
 
 class Routes extends Component {
@@ -23,8 +23,8 @@ class Routes extends Component {
         <Route exact path="/auth" component={Auth} />
         {currentUser && (
           <Switch>
-            <Route exact path="/profile" component={Profile} />
             <Route exact path="/quotes" component={Quotes} />
+            <Route exact path="/edit" component={EditQuote} />
             <Route path="/search" component={Search} />
           </Switch>
         )}

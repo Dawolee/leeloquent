@@ -13,6 +13,7 @@ class Quotes extends Component {
 
   componentDidMount() {
     let { user, getAllQuotes } = this.props
+    this.setState({ currentUser: user })
     getAllQuotes(user.email)
   }
 
@@ -41,14 +42,15 @@ class Quotes extends Component {
 
   render() {
     let { quotes } = this.props
-    let { add } = this.state
+    let { add, currentUser } = this.state
     return (
       <div>
-        <Button onClick={this.toggleAdd}>
+        {currentUser && <h1>Welcome {currentUser.displayName}!</h1>}
+        <Button variant="contained" onClick={this.toggleAdd}>
           {add ? 'Close text field' : 'Add new quote!'}
         </Button>
         {add && (
-          <div id="full-width">
+          <div className="full-width">
             <TextField
               fullWidth
               label="Add a new quote"
@@ -60,19 +62,25 @@ class Quotes extends Component {
               value={this.state.currentQuote}
               onChange={this.handleChange}
             />
-            <Button variant="outlined" onClick={this.handleSubmit}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={this.handleSubmit}
+            >
               Add
             </Button>
           </div>
         )}
-        <div>
+        <h1>Your Saved Quotes</h1>
+        <div className="all-quotes">
           {quotes &&
             quotes.map(quote => {
               return (
                 <Link
+                  className="single-quote"
                   key={quote}
                   to={{
-                    pathname: '/search',
+                    pathname: '/edit',
                     state: {
                       quote
                     }

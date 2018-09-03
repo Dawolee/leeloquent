@@ -19,6 +19,7 @@ body {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  margin-bottom: 2%;
 }
 
 #firebaseui-auth-container {
@@ -26,11 +27,12 @@ body {
   justify-content: space-evenly;
 }
 
-#full-width {
+.full-width {
   width: 80%;
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto 0 auto;
+  justify-content: center;
 }
 
 .App-header {
@@ -59,4 +61,29 @@ body {
 .bottom-nav {
   display: flex;
   justify-content: center;
+}
+
+.auth {
+  margin-top: 10%;
+}
+
+.all-quotes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.single-quote {
+  display: block;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2%;
+}
+
+.single-btn {
+  margin: 0 2% 2% 2%;
 }

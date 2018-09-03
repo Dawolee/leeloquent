@@ -5,8 +5,9 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import synonyms from './synonyms'
 import user from './user'
 import quotes from './quotes'
+import otherUserQuotes from './otherUserQuotes'
 
-const reducer = combineReducers({ synonyms, user, quotes })
+const reducer = combineReducers({ synonyms, user, quotes, otherUserQuotes })
 
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
