@@ -18,8 +18,9 @@ export const fetchEveryQuote = email => dispatch => {
       querySnapshot.forEach(function(doc) {
         //grabs every quote that isn't associated with the current user
         let current = doc.data()
-        if (current.associatedUser !== email) {
-          quotesArr.push([current.quote, current.associatedUser])
+        //makes sure if the current quote is set to public or private
+        if (current.associatedUser !== email && current.isPublic) {
+          quotesArr.push([current.quote, current.displayName])
         }
       })
       dispatch(getOtherQuotes(quotesArr))

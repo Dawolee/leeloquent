@@ -74,12 +74,14 @@ export const deleteQuoteFromDb = (quote, history) => dispatch => {
     })
 }
 
-export const addQuoteToDb = (quote, email) => dispatch => {
+export const addQuoteToDb = (quote, email, name, makePublic) => dispatch => {
   return db
     .collection('quotes')
     .add({
       quote: quote,
-      associatedUser: email
+      associatedUser: email,
+      displayName: name,
+      isPublic: makePublic
     })
     .then(docRef => {
       console.log('Document written with ID: ', docRef.id)
@@ -90,7 +92,12 @@ export const addQuoteToDb = (quote, email) => dispatch => {
     })
 }
 
-export const updateQuoteInDB = (email, quote, updatedQuote) => dispatch => {
+export const updateQuoteInDB = (
+  email,
+  quote,
+  updatedQuote,
+  makePublic
+) => dispatch => {
   //finds quote by user and matching quote, then grabs the id of the quote to update it and dispatch changes to reducer.
   return db
     .collection('quotes')
@@ -101,7 +108,7 @@ export const updateQuoteInDB = (email, quote, updatedQuote) => dispatch => {
       querySnapshot.forEach(doc => {
         db.collection('quotes')
           .doc(doc.id)
-          .update({ quote: updatedQuote })
+          .update({ quote: updatedQuote, isPublic: makePublic })
       })
       dispatch(updateQuote(updatedQuote))
     })

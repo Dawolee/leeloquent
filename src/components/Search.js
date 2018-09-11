@@ -15,7 +15,6 @@ class Search extends Component {
 
   render() {
     let { otherQuotes } = this.props
-    console.log(this.props)
     return (
       <div>
         <h2>Quotes From Other Users</h2>

@@ -8,7 +8,8 @@ class Quotes extends Component {
   state = {
     currentUser: null,
     currentQuote: '',
-    add: false
+    add: false,
+    isPublic: false
   }
 
   componentDidMount() {
@@ -17,17 +18,25 @@ class Quotes extends Component {
     getAllQuotes(user.email)
   }
 
+  togglePublic = () => {
+    //toggles whether is public/private
+    //defaulst value is private
+    this.state.isPublic
+      ? this.setState({ isPublic: false })
+      : this.setState({ isPublic: true })
+  }
+
   handleChange = event => {
     this.setState({ currentQuote: event.target.value })
   }
 
   handleSubmit = () => {
     let { user, addQuote } = this.props
-    let { currentQuote } = this.state
+    let { currentQuote, isPublic } = this.state
     if (currentQuote.length) {
       //checks if current string is empty or not before adding to firestore
       let temp = currentQuote
-      addQuote(temp, user.email)
+      addQuote(temp, user.email, user.displayName, isPublic)
       //sets currentQuote to empty, so you can start typing a new quote to add
       this.setState({ currentQuote: '' })
     }
@@ -42,7 +51,7 @@ class Quotes extends Component {
 
   render() {
     let { quotes } = this.props
-    let { add, currentUser } = this.state
+    let { add, currentUser, isPublic } = this.state
     return (
       <div>
         {currentUser && <h1>Welcome {currentUser.displayName}!</h1>}
@@ -62,6 +71,23 @@ class Quotes extends Component {
               value={this.state.currentQuote}
               onChange={this.handleChange}
             />
+            {isPublic ? (
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={this.togglePublic}
+              >
+                Make Private
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={this.togglePublic}
+              >
+                Make Public
+              </Button>
+            )}
             <Button
               variant="outlined"
               color="primary"
@@ -71,7 +97,11 @@ class Quotes extends Component {
             </Button>
           </div>
         )}
-        <h1>Your Saved Quotes</h1>
+        {quotes.length ? (
+          <h1>Your Saved Quotes</h1>
+        ) : (
+          <h1>You have no quotes at the moment!</h1>
+        )}
         <div className="all-quotes">
           {quotes &&
             quotes.map(quote => {
@@ -108,8 +138,8 @@ const mapDispatch = dispatch => {
     getAllQuotes: email => {
       dispatch(fetchAllQuotes(email))
     },
-    addQuote: (quote, email) => {
-      dispatch(addQuoteToDb(quote, email))
+    addQuote: (quote, email, name, isPublic) => {
+      dispatch(addQuoteToDb(quote, email, name, isPublic))
     }
   }
 }

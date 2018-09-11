@@ -34,7 +34,8 @@ class EditQuote extends Component {
     editedQuote: '',
     selectedWordIdx: null,
     selectedSynonym: null,
-    tempQuote: ''
+    tempQuote: '',
+    isPublic: false
   }
 
   componentDidMount() {
@@ -58,6 +59,13 @@ class EditQuote extends Component {
     this.state.edit
       ? this.setState({ edit: false })
       : this.setState({ edit: true })
+  }
+
+  togglePublic = () => {
+    //toggles whether is public/private
+    this.state.isPublic
+      ? this.setState({ isPublic: false })
+      : this.setState({ isPublic: true })
   }
 
   editQuote = event => {
@@ -113,15 +121,15 @@ class EditQuote extends Component {
 
   saveChanges = () => {
     //if local quote is different from the original quote, saves changes
-    let { quote } = this.state
+    let { quote, isPublic } = this.state
     let { updateQuote, user, location } = this.props
     let originalQuote = location.state.quote
-    updateQuote(user.email, originalQuote, quote)
+    updateQuote(user.email, originalQuote, quote, isPublic)
     this.setState({ selectedWordIdx: null })
   }
 
   render() {
-    let { word, search, quote, edit, selectedWordIdx } = this.state
+    let { word, search, quote, edit, selectedWordIdx, isPublic } = this.state
     let { synonyms } = this.props
     //gets rid of special characters
     let temp = quote.replace(/[^a-zA-Z ]/g, '').split(' ')
@@ -149,6 +157,23 @@ class EditQuote extends Component {
           >
             Delete Quote
           </Button>
+          {isPublic ? (
+            <Button
+              className={styles.button}
+              color="primary"
+              onClick={this.togglePublic}
+            >
+              Make Private
+            </Button>
+          ) : (
+            <Button
+              className={styles.button}
+              color="primary"
+              onClick={this.togglePublic}
+            >
+              Make Public
+            </Button>
+          )}
         </div>
         <h2>Current Quote</h2>
         <div className="edit-quote">
@@ -272,8 +297,8 @@ const mapDispatch = dispatch => {
     deleteQuote: (quote, history) => {
       dispatch(deleteQuoteFromDb(quote, history))
     },
-    updateQuote: (email, quote, updatedQuote) => {
-      dispatch(updateQuoteInDB(email, quote, updatedQuote))
+    updateQuote: (email, quote, updatedQuote, isPublic) => {
+      dispatch(updateQuoteInDB(email, quote, updatedQuote, isPublic))
     }
   }
 }
