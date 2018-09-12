@@ -3,6 +3,7 @@ import { book, pwa, share } from '../images/'
 import { DecoCards } from './index'
 
 class Home extends Component {
+  btnAdd = this.refs.btnAdd
   render() {
     return (
       <div>
